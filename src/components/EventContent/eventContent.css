@@ -1,0 +1,42 @@
+.event-content-inner-main-div {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.event-content-header-main-div {
+  max-width: 150px;
+  min-width: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background-color: yellowgreen;
+  color: black;
+}
+
+.event-content-main-div {
+  max-height: 300px;
+  min-width: 500px;
+  overflow: auto;
+}
+
+.event-type-content-row-div {
+  padding: 1em;
+  margin: 10px;
+  margin-left: 1px;
+}
+.event-content-inner-main-div {
+  display: flex;
+  margin-top: 11px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.event-type-content-row-div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 1000px;
+  min-width: 100px;
+}

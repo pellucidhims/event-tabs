@@ -1,0 +1,45 @@
+.event-type-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.event-type-header-div {
+  position: fixed;
+  top: 0;
+  background-color: darkseagreen;
+}
+
+::-webkit-scrollbar {
+  background: none;
+}
+
+.event-type-header-div > h1 {
+  position: fixed;
+  top: 0;
+  padding: 10px;
+  color: white;
+  background-color: yellowgreen;
+  text-align: center;
+}
+
+.event-type-list-main-div {
+  margin-top: 2em;
+  max-height: 300px;
+  overflow: auto;
+}
+
+ul,
+li {
+  margin: 1em;
+  padding: 1px 3px;
+  background-color: rgb(192, 183, 183);
+}
+
+.event-list-div {
+  padding-top: 1em;
+}
+.event-list-div > div > li {
+  list-style: none;
+}

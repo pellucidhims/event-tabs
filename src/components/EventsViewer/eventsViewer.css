@@ -1,0 +1,17 @@
+.main-app-div {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.event-content-main-div {
+  display: block;
+  max-width: 800px;
+  min-width: 800px;
+  overflow: auto;
+}
+
+.event-content-sec-div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
