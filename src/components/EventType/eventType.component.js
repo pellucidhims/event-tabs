@@ -40,7 +40,7 @@ export default class EventType extends Component {
       return (
         <div key={item.id}>
           <li onClick={this.handleItemClick(item)}>{item.name}</li>
-          <hr />
+          <hr style={{color:'black',margin: '0px'}}/>
         </div>
       );
     });

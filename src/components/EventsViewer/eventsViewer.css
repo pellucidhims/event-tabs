@@ -1,17 +1,67 @@
-.main-app-div {
+.main-div {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+
 }
-.event-content-main-div {
-  display: block;
-  max-width: 800px;
-  min-width: 800px;
-  overflow: auto;
+.main-app-div{
+  max-width: 1000px;
+  min-width: 500px;
+  max-height: 800px;
+  min-height: 600px;
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: center;
+  background-color: none;
+  position: fixed;
+  top: 5%;
+  overflow: hidden;
 }
 
-.event-content-sec-div {
+::-webkit-scrollbar {
+    display: none;
+}
+
+.main-app-div:nth-of-type(1){flex-grow: 1;}
+.main-app-div:nth-of-type(2){flex-grow: 4;}
+
+.event-type-main-div{
+  background-color: blue;
+  min-width: 200px;
+  max-height: 800px;
+  min-height: 600px;
+
+}
+
+.event-content-main-div{
+  background: transparent;
+  min-width: 800px;
+  max-height: 800px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.event-content-sec-div{
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  max-width: 800px;
+  max-height: 530px;
+  overflow: hidden;
+  border: solid 1px darkgray;
+}
+
+.event-content-header-tabs-div{
+  line-height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  max-width: 800px;
+  overflow: auto;
 }

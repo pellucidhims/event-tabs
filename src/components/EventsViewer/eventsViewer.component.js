@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import EventType from "../EventType/eventType.component";
 import EventContent from "../EventContent/eventContent.component";
+import TabHeader from '../TabHeader/tabHeader.component';
 
 import "./eventsViewer.css";
 
@@ -33,66 +34,160 @@ const availableEvents = [
   { name: "Events Type 26", id: "26" }
 ];
 
+
+function reassignTab(tabList,replaceTabId){
+  console.log("reassigning, tablist: ",tabList);
+  if(tabList.length >1){
+    for(let i=0;i<tabList.length;i++){
+      if(tabList[i].id==replaceTabId){
+         if(tabList[i+1] !== undefined){
+           return tabList[i+1].id
+         }else{
+           return tabList[i-1].id;
+         }
+      }
+    }
+  }
+  return ''
+}
+
 export default class EventsViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedEvents: []
+      selectedEvents: [],
+      selectedTabHeaders: [],
+      currentActiveTab: ''
     };
   }
 
+
   handleEventSelect = e => {
-    let currSelected = [...this.state.selectedEvents];
-    let pushToSelected = true;
-    for (let item of currSelected) {
+    //let currSelected = [...this.state.selectedEvents];
+    let currSelectedTabHeaders = [...this.state.selectedTabHeaders];
+    //let pushToSelected = true;
+    let pushToSelectedTabHeaders = true;
+    // for (let item of currSelected) {
+    //   if (item.id === e.id && item.name === e.name) {
+    //     pushToSelected = false;
+    //     break;
+    //   }
+    // }
+    for (let item of currSelectedTabHeaders) {
       if (item.id === e.id && item.name === e.name) {
-        pushToSelected = false;
+        pushToSelectedTabHeaders = false;
         break;
       }
     }
-    if (pushToSelected) {
-      currSelected.push(e);
+    // if (pushToSelected) {
+    //   currSelected.push(e);
+    //   this.setState({
+    //     selectedEvents: currSelected
+    //   });
+    // }
+    if (pushToSelectedTabHeaders) {
+      currSelectedTabHeaders.push(e);
       this.setState({
-        selectedEvents: currSelected
+        selectedTabHeaders: currSelectedTabHeaders,
+        currentActiveTab: e.id
+      });
+    }else{
+      this.setState({
+        currentActiveTab: e.id
       });
     }
+
   };
 
-  handleEventClose = boundItem => e => {
-    console.log("Closing item :", boundItem);
-    let newSelectedItems = this.state.selectedEvents.filter(
-      item => item.id !== boundItem.id
-    );
+  handleEventClose = e => {
+    // console.log("Closing item :", boundItem);
+    // let newSelectedItems = this.state.selectedEvents.filter(
+    //   item => item.id !== boundItem.id
+    // );
+    // this.setState({
+    //   selectedEvents: newSelectedItems
+    // });
+
+  };
+
+  handleTabClose=(e)=>{
+    let reassignCurrentTab = '';
+
+    let keepTabsOpenList = this.state.selectedTabHeaders.filter((item,idx)=>{
+          if(item.id!==this.state.currentActiveTab && item.id!==e.id){
+            return item;
+          }else if(item.id===this.state.currentActiveTab && item.id===e.id){
+            reassignCurrentTab = reassignTab(this.state.selectedTabHeaders,e.id);
+          }else if(item.id!==e.id && item.id===this.state.currentActiveTab){
+            return item;
+          }
+    });
     this.setState({
-      selectedEvents: newSelectedItems
+      selectedTabHeaders: keepTabsOpenList,
+      currentActiveTab: reassignCurrentTab.trim()!==''?reassignCurrentTab:this.state.currentActiveTab
     });
-  };
+  }
 
-  renderEventContentTabs = () => {
-    console.log("rendering event tabs: ", this.state.selectedEvents);
-    return this.state.selectedEvents.map(item => {
-      return (
-        <EventContent
-          selectedEvents={item}
-          onEventClose={this.handleEventClose(item)}
-          key={item.id}
+  handleTabActivation=(e)=>{
+    this.setState({
+      currentActiveTab: e.id
+    })
+  }
+
+  renderTabHeader=()=>{
+    return this.state.selectedTabHeaders.map((header,idx)=>{
+      return(
+        <TabHeader
+          header={header}
+          closeTab={this.handleTabClose}
+          activateTab={this.handleTabActivation}
+          key={header.id}
+          active={this.state.currentActiveTab === header.id? true: (!this.state.currentActiveTab && idx===this.state.selectedTabHeaders.length-1?true:false)}
         />
-      );
-    });
+      )
+    })
+  }
+
+  renderEventContentTabs = (tabId) => {
+      console.log("render tab id: ",tabId);
+      console.log("selectedTabHeaders: ",this.state.selectedTabHeaders);
+      let renderItem = this.state.selectedTabHeaders.filter(item=>item.id==tabId);
+      if(renderItem.length > 0) {
+        return (
+              <div>
+              <div style={{paddingLeft: '10px'}}>
+                <h3> {`Current tab - ${renderItem[0].name}`}</h3>
+              </div>
+              <EventContent
+                selectedEvents={renderItem}
+                onEventClose={this.handleEventClose(renderItem)}
+                key={renderItem.id}
+              />
+              </div>
+        );
+      }else{
+        return '';
+      }
   };
 
   render() {
+    console.log('render called with state: ',this.state)
     return (
-      <div className="main-app-div">
-        <div className="event-type-main-div">
-          <EventType
-            availableEventType={availableEvents}
-            onEventSelect={this.handleEventSelect}
-          />
-        </div>
-        <div className="event-content-main-div">
-          <div className="event-content-sec-div">
-            {this.renderEventContentTabs()}
+      <div className="main-div">
+        <div className="main-app-div">
+          <div className="event-type-main-div">
+            <EventType
+              availableEventType={availableEvents}
+              onEventSelect={this.handleEventSelect}
+            />
+          </div>
+          <div className="event-content-main-div">
+            <div className="event-content-header-tabs-div">
+              {this.renderTabHeader()}
+            </div>
+            <div className="event-content-sec-div">
+              {this.state.currentActiveTab? this.renderEventContentTabs(this.state.currentActiveTab):''}
+            </div>
           </div>
         </div>
       </div>

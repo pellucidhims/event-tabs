@@ -24,8 +24,9 @@ export default class EventContent extends Component {
     };
   }
   componentWillMount() {
+    console.log("this.props.selectedEvents[0].id",this.props.selectedEvents)
     this.setState({
-      eventTypeContents: generateContent(10),
+      eventTypeContents: +this.props.selectedEvents[0].id%2===0?generateContent(5):generateContent(20),
       eventType: this.props.selectedEvents
     });
     console.log("content: ", this.state.eventTypeContents);
@@ -37,23 +38,35 @@ export default class EventContent extends Component {
       this.state.eventTypeContents.length <= 0 ||
       !this.state.eventType
     ) {
+      console.log("this.props.selectedEvents[0].id",this.props.selectedEvents)
       this.setState({
-        eventTypeContents: generateContent(10),
+        eventTypeContents: +this.props.selectedEvents[0].id%2===0?generateContent(5):generateContent(20),
         eventType: this.props.selectedEvents
       });
     }
+  }
+
+  componentWillReceiveProps(){
+    console.log("this.props.selectedEvents[0].id",this.props.selectedEvents)
+    this.setState({
+      eventTypeContents: +this.props.selectedEvents[0].id%2===0?generateContent(5):generateContent(20),
+      eventType: this.props.selectedEvents
+    });
   }
 
   renderEventContents = () => {
     console.log("rendering contents, array: ", this.state.eventTypeContents);
     return this.state.eventTypeContents.map((item, idx) => {
       return (
-        <div>
-          <div className="event-type-content-row-div" key={idx}>
+        <div
+          style={{backgroundColor:`${idx%2===0?'#f1f3f4':'white'}`}}
+           key={idx}
+        >
+          <div
+            className="event-type-content-row-div">
             <div>{item.time.toString()}</div>
             <div>{item.content.toString()}</div>
           </div>
-          <hr />
         </div>
       );
     });
@@ -72,28 +85,7 @@ export default class EventContent extends Component {
   render() {
     return (
       <div className="event-content-inner-main-div">
-        <div
-          className="event-content-header-main-div"
-          onMouseOver={this.handleCloseIcon}
-        >
-          <p>
-            {this.state.eventType
-              ? this.state.eventType.name
-              : "Loading value..."}
-          </p>
-          <span
-            style={{
-              opacity: `${this.state.showCloseIcon ? 1 : 0}`,
-              cursor: "pointer",
-              fontWeight: "bolder",
-              padding: "5px"
-            }}
-            onClick={this.handleCloseTab}
-          >
-            &times;
-          </span>
-        </div>
-        <div className="event-content-main-div">
+        <div className="event-content-list-div">
           {this.state.eventTypeContents &&
           this.state.eventTypeContents.length >= 1
             ? this.renderEventContents()
